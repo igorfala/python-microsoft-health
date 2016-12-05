@@ -30,22 +30,22 @@ Python3:
 ::
   from MicrosoftHealth import MHOauth2Client, MH
   mhOauthObject = MHOauth2Client(client_id = mh_key, client_secret = mh_secret)
-client_id, and client_secret are provided by Under Armour when registering your application
+client_id, and client_secret are provided by Microsoft Health when registering your application
 ::
   url, state = mhOauthObject.authorize_token_url(mh_callback_url)
 Let the user open the *url*. Save the *state* to the database.
 call_back_url is the url that you set when registering your app.
 The user will be redirected to it after giving the app access to
-their account. Under Armour will do a get request to that url
+their account. Microsoft Health will do a get request to that url
 with a code. The code is used to get the token.
 ::
   tokenInfo = mhOauthObject.fetch_access_token(code)
 
 tokenInfo contains all the info needed (access token, refresh token, etc.)
-When getting the token info from Under Armour, save it to the database for later use.
+When getting the token info from Microsoft Health, save it to the database for later use.
 ::
   mhObject = MH(client_id = mh_key, client_secret = mh_secret, access_token=access_token)
-Call the *mhObject* methods to interact with Under Armour API.
+Call the *mhObject* methods to interact with Microsoft Health API.
 Example:
 ::
   profile = mhObject.user_profile_get(user_id=mh_user_id)
@@ -55,7 +55,7 @@ For any methods that are not included in the library:
   result = mhObject.make_request(url, method, data)
 
 The methods and *data* format could be found at:
-`https://developer.underarmour.com/docs/`
+`https://developer.microsoftband.com/Content/docs/MS%20Health%20API%20Getting%20Started.pdf`
 
 ----
 
@@ -63,4 +63,4 @@ The methods and *data* format could be found at:
 
 MIT License
 
-see: 'https://github.com/igorfala/python-under-armour/blob/master/LICENSE'
+see: 'https://github.com/igorfala/python-microsoft-health/blob/master/LICENSE'

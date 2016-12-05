@@ -13,11 +13,13 @@ class MHOauth2Client(object):
     AUTHORIZE_ENDPOINT = "https://login.live.com/oauth20_authorize.srf?"
     TOKEN_ENDPOINT = 'https://login.live.com/oauth20_token.srf?'
     API_VERSION = 'v1'
-    def __init__(self, client_id, client_secret, scope = None,
+    scope = ['mshealth.ReadProfile', 'mshealth.ReadActivityHistory', \
+    'mshealth.ReadDevices', 'mshealth.ReadActivityLocation', 'offline_access']
+    def __init__(self, client_id, client_secret,
                  access_token=None, refresh_token=None,
                  *args, **kwargs):
         """
-        Create a UAOauth2Client object. Specify the first 7 parameters if
+        Create a MHOauth2Client object. Specify the first 7 parameters if
         you have them to access user data. Specify just the first 2 parameters
         to start the setup for user authorization (as an example see gather_key_oauth2.py)
             - client_id, client_secret are in the app configuration page
@@ -31,7 +33,6 @@ class MHOauth2Client(object):
             'refresh_token': refresh_token
         }
         self.oauth = OAuth2Session(client_id)
-        self.scope = scope
 
     def make_request(self, url, data={}, method=None, **kwargs):
         """
@@ -62,7 +63,7 @@ class MHOauth2Client(object):
             raise HTTPServerError(response.json())
         return response.json()
 
-    def authorize_token_url(self, redirect_uri=None, **kwargs):
+    def authorize_token_url(self, redirect_uri=None, scope=None, **kwargs):
         """Step 1: Return the URL the user needs to go to in order to grant us
         authorization to look at their data.  Then redirect the user to that
         URL, open their browser to it, or tell them to copy the URL into their
@@ -72,8 +73,11 @@ class MHOauth2Client(object):
                             required only if your app does not have one
             for more info see https://developer.microsoftband.com/Content/docs/MS%20Health%20API%20Getting%20Started.pdf
         """
-
-        params = {"scope": self.scope,
+        if not scope:
+            scope = " ".join(self.scope)
+        else:
+            scope = " ".join(scope)
+        params = {"scope": scope,
                   "redirect_uri": redirect_uri}
 
         authorization_url = "%s%s" % (self.AUTHORIZE_ENDPOINT, urlencode(params))
@@ -119,13 +123,12 @@ class MH(object):
 
     API_ENDPOINT = "https://api.microsofthealth.net"
     API_VERSION = 1
-    def __init__(self, microsoft_health_key, microsoft_health_secret, scope=None, system=US, access_token = None, **kwargs):
+    def __init__(self, microsoft_health_key, microsoft_health_secret, system=US, access_token = None, **kwargs):
         """
         MH(<id>, <secret>, access_token=<token>, refresh_token=<token>)
         """
         self.system = system
-        self.client = MicrosoftOauth2Client(microsoft_health_key, microsoft_health_secret,scope=scope, access_token=access_token)
-        self.scope = scope
+        self.client = MHOauth2Client(microsoft_health_key, microsoft_health_secret, access_token=access_token)
         # All of these use the same patterns, define the method for accessing
         # creating and deleting records once, and use curry to make individual
         # Methods for each
@@ -133,7 +136,7 @@ class MH(object):
     def make_request(self, url, *args, **kwargs):
         # This should handle data level errors, improper requests, and bad
         # serialization
-        response = self.client.make_request(url, data, method, *args, **kwargs)
+        response = self.client.make_request(url, method=None, data = None, *args, **kwargs)
         return response
 
     def user_profile_get(self, user_id=None):

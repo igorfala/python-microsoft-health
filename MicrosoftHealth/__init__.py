@@ -36,7 +36,7 @@ https://developer.microsoftband.com/Content/docs/MS%20Health%20API%20Getting%20S
 
 """
 from .Exceptions import *
-from .UnderArmour import MH, MHOauth2Client
+from .MicrosoftHealth import MH, MHOauth2Client
 # Meta info
 __version__ = "0.1.0"
 __author__ = "Igor Fala"

@@ -23,11 +23,11 @@ setup(
     # https://packaging.python.org/en/latest/single_source_version.html
     version= MicrosoftHealth.__version__,
 
-    description='Python SDK for Under Armour API',
-    long_description= 'Python library that can be used to connect and interact with Under Armour API',
+    description='Python SDK for Microsoft Health API',
+    long_description= 'Python library that can be used to connect and interact with Microsoft Health API',
 
     # The project's main homepage.
-    url='https://github.com/igorfala/python-under-armour',
+    url='https://github.com/igorfala/python-microsoft-health',
 
     # Author details
     author='Igor Fala',

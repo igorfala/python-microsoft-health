@@ -8,10 +8,10 @@ Python library that can be used to connect and interact with Microsoft Health AP
 
 Python2:
 ::
-  pip install MSHealth
+  pip install MicrosoftHealth
 Python3:
 ::
-  pip3 install MSHealth
+  pip3 install MicrosoftHealth
 
 ----
 
